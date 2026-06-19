@@ -243,7 +243,8 @@ p {
   font-size: 12px;
 }
 
-.project-grid {
+.project-grid,
+.works-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
@@ -329,7 +330,8 @@ p {
   color: var(--color-cyan);
 }
 
-.pipeline-list {
+.pipeline-list,
+.pipeline-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
@@ -343,10 +345,41 @@ p {
   font-size: 15px;
 }
 
-.link-row {
+.link-row,
+.link-group,
+.repo-list {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+
+.repo-list {
+  margin-top: 18px;
+}
+
+.link-button,
+.repo-link {
+  min-height: 40px;
+  padding: 9px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  color: var(--color-text);
+  background: rgba(255, 255, 255, 0.08);
+  font: inherit;
+}
+
+.repo-link {
+  color: var(--color-cyan);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.link-button:hover,
+.repo-link:hover {
+  color: var(--color-cyan);
 }
 
 @media (max-width: 900px) {
@@ -360,7 +393,9 @@ p {
   }
 
   .project-grid,
-  .pipeline-list {
+  .works-grid,
+  .pipeline-list,
+  .pipeline-grid {
     grid-template-columns: 1fr;
   }
 }
