@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { FrameCanvas } from "./components/FrameCanvas";
 import { HeroSection } from "./components/HeroSection";
 import { HudBadge } from "./components/HudBadge";
@@ -9,58 +11,62 @@ import { ScrollProgress } from "./components/ScrollProgress";
 import { SiteNav } from "./components/SiteNav";
 import { WorksSection } from "./components/WorksSection";
 import { featuredRepos, links } from "./data/links";
-import { pipelineSteps, navSections, sectionStates } from "./data/sections";
 import { projects } from "./data/projects";
-import type { SectionId } from "./types/content";
+import { navSections, pipelineSteps, sectionStates } from "./data/sections";
+import type { SectionId, SectionState } from "./types/content";
 
-function getScrollProgress() {
-  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-  return maxScroll <= 0 ? 0 : window.scrollY / maxScroll;
-}
+gsap.registerPlugin(ScrollTrigger);
 
-function getActiveSection(): SectionId {
-  const viewportAnchor = window.innerHeight * 0.42;
-  const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-section]"));
-  for (let index = panels.length - 1; index >= 0; index -= 1) {
-    const panel = panels[index];
-    if (panel.getBoundingClientRect().top <= viewportAnchor) {
-      return (panel.dataset.section as SectionId | undefined) ?? "hero";
-    }
-  }
-
-  return "hero";
+function getSectionState(id: SectionId): SectionState {
+  return sectionStates.find((section) => section.id === id) ?? sectionStates[0];
 }
 
 export default function App() {
   const [progress, setProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<SectionId>("hero");
-  const activeState = useMemo(
-    () => sectionStates.find((state) => state.id === activeSection) ?? sectionStates[0],
-    [activeSection],
-  );
+  const activeState = useMemo(() => getSectionState(activeSection), [activeSection]);
 
   useEffect(() => {
-    const syncScrollState = () => {
-      setProgress(getScrollProgress());
-      setActiveSection(getActiveSection());
-    };
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    syncScrollState();
-    window.addEventListener("scroll", syncScrollState, { passive: true });
-    window.addEventListener("resize", syncScrollState);
+    if (reduceMotion) {
+      setProgress(0.62);
+      setActiveSection("intro");
+      return;
+    }
+
+    const mainTrigger = ScrollTrigger.create({
+      trigger: ".story",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 0.45,
+      onUpdate: (self) => setProgress(self.progress),
+    });
+
+    const sectionTriggers = gsap.utils.toArray<HTMLElement>(".story-panel").map((section) =>
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => setActiveSection((section.dataset.section as SectionId) || "hero"),
+        onEnterBack: () => setActiveSection((section.dataset.section as SectionId) || "hero"),
+      }),
+    );
+
     return () => {
-      window.removeEventListener("scroll", syncScrollState);
-      window.removeEventListener("resize", syncScrollState);
+      mainTrigger.kill();
+      sectionTriggers.forEach((trigger) => trigger.kill());
     };
   }, []);
 
   return (
     <>
       <FrameCanvas progress={progress} />
-      <ScrollProgress progress={progress} />
+      <div className="page-vignette" aria-hidden="true" />
       <SiteNav sections={navSections} activeSection={activeSection} />
       <HudBadge state={activeState} />
-      <main className="app-shell">
+      <ScrollProgress progress={progress} />
+      <main className="app-shell story">
         <HeroSection />
         <IntroSection />
         <WorksSection projects={projects} />
