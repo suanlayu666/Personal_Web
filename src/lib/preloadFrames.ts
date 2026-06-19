@@ -3,6 +3,8 @@ export type PreloadResult = {
   failed: string[];
 };
 
+export type PreloadProgress = (result: PreloadResult) => void;
+
 function loadImage(src: string) {
   return new Promise<HTMLImageElement>((resolve, reject) => {
     const image = new Image();
@@ -13,7 +15,7 @@ function loadImage(src: string) {
   });
 }
 
-export async function preloadFrames(srcList: string[], batchSize = 8): Promise<PreloadResult> {
+export async function preloadFrames(srcList: string[], batchSize = 8, onProgress?: PreloadProgress): Promise<PreloadResult> {
   const loaded: HTMLImageElement[] = [];
   const failed: string[] = [];
 
@@ -28,6 +30,8 @@ export async function preloadFrames(srcList: string[], batchSize = 8): Promise<P
         failed.push(batch[batchIndex]);
       }
     });
+
+    onProgress?.({ loaded: [...loaded], failed: [...failed] });
   }
 
   return { loaded, failed };

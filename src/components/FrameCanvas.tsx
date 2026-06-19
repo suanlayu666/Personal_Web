@@ -34,13 +34,15 @@ export function FrameCanvas({ progress }: FrameCanvasProps) {
     let cancelled = false;
 
     async function run() {
-      const result = await preloadFrames(frameList, 8);
-      if (!cancelled) {
-        setImages(result.loaded);
-      }
+      await preloadFrames(frameList, 8, (result) => {
+        if (!cancelled && result.loaded.length > 0) {
+          setImages(result.loaded);
+        }
+      });
     }
 
     if (frameList.length > 0) {
+      setImages([]);
       void run();
     }
 
