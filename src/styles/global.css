@@ -1,0 +1,68 @@
+﻿* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+
+a {
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(86, 184, 255, 0.12), transparent 34%),
+    var(--color-bg);
+}
+
+.section {
+  min-height: 100vh;
+  padding: 96px var(--section-pad-x);
+  display: grid;
+  align-items: center;
+}
+
+.section--hero {
+  max-width: var(--content-max);
+  margin: 0 auto;
+}
+
+.eyebrow,
+.hero-tags {
+  color: var(--color-muted);
+  letter-spacing: 0;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(48px, 8vw, 112px);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.hero-cn {
+  margin: 18px 0 0;
+  color: var(--color-cyan);
+  font-size: clamp(20px, 3vw, 34px);
+}
+
+.hero-tags {
+  margin-top: 28px;
+  font-size: 15px;
+}
