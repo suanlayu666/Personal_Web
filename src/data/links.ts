@@ -14,9 +14,10 @@ export const links: PublicLink[] = [
   },
 ];
 
-export const featuredRepos: Array<Pick<PublicLink, "label" | "href">> = projects
+export const featuredRepos: PublicLink[] = projects
   .filter((project): project is Project & { repo: string } => Boolean(project.repo))
   .map((project) => ({
     label: project.title,
     href: project.repo,
+    kind: "repo",
   }));

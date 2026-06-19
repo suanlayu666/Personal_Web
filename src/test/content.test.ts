@@ -23,10 +23,12 @@ describe("content data", () => {
       {
         label: "蓝牙遥控避障小车",
         href: "https://github.com/suanlayu666/DoubleDriverCar",
+        kind: "repo",
       },
       {
         label: "Never Forget",
         href: "https://github.com/suanlayu666/Never_Forget_App",
+        kind: "repo",
       },
     ]);
   });
