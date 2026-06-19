@@ -34,10 +34,10 @@ export const sectionStates: SectionState[] = [
 ];
 
 export const navSections = [
-  { id: "intro", label: "Intro" },
-  { id: "works", label: "Works" },
-  { id: "pipeline", label: "Pipeline" },
-  { id: "links", label: "Links" },
+  { id: "intro", label: "简介" },
+  { id: "works", label: "作品" },
+  { id: "pipeline", label: "路线" },
+  { id: "links", label: "联系" },
 ] as const;
 
 export const pipelineSteps: PipelineStep[] = [

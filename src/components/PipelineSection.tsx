@@ -1,4 +1,5 @@
 import type { PipelineStep } from "../types/content";
+import { ScrollFloatText } from "./ScrollFloatText";
 
 type PipelineSectionProps = {
   steps: PipelineStep[];
@@ -8,8 +9,8 @@ export function PipelineSection({ steps }: PipelineSectionProps) {
   return (
     <section className="section story-panel" id="pipeline" data-section="pipeline" aria-labelledby="pipeline-title">
       <div className="section__inner">
-        <p className="eyebrow">Pipeline</p>
-        <h2 id="pipeline-title">From idea to working demo</h2>
+        <p className="eyebrow">路线</p>
+        <ScrollFloatText id="pipeline-title">从想法到可运行 Demo</ScrollFloatText>
         <p className="section-lead">我更关心一件事如何真的跑起来：先定义问题，再组织 AI 逻辑，接入真实世界，最后做出可验证的 Demo。</p>
         <div className="pipeline-grid">
           {steps.map((step, index) => (

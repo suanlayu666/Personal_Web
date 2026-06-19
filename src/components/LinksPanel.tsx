@@ -1,4 +1,5 @@
 import type { PublicLink } from "../types/content";
+import { ScrollFloatText } from "./ScrollFloatText";
 
 type LinksPanelProps = {
   links: PublicLink[];
@@ -9,12 +10,12 @@ export function LinksPanel({ links, featuredRepos }: LinksPanelProps) {
   return (
     <section className="section story-panel" id="links" data-section="links" aria-labelledby="links-title">
       <div className="section__inner section__inner--narrow">
-        <p className="eyebrow">Links</p>
-        <h2 id="links-title">Signal out.</h2>
+        <p className="eyebrow">联系</p>
+        <ScrollFloatText id="links-title">保持连接</ScrollFloatText>
         <p className="section-lead">
-          Open to conversations around AI prototypes, embedded systems, and Physical AI.
+          欢迎围绕 AI 原型、嵌入式系统和 Physical AI 交流。
           <br />
-          欢迎围绕 AI 原型、嵌入式系统与 Physical AI 交流。
+          也可以直接查看我的 GitHub 和精选项目仓库。
         </p>
         <div className="link-group" aria-label="Primary links">
           {links.map((link) => (

@@ -8,3 +8,7 @@ screenshots/
 *.log
 .DS_Store
 Thumbs.db
+
+# Private source/reference files
+vedio.mp4
+MinerU_markdown_*.md
