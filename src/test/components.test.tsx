@@ -6,6 +6,7 @@ import { IntroSection } from "../components/IntroSection";
 import { LinksPanel } from "../components/LinksPanel";
 import { PipelineSection } from "../components/PipelineSection";
 import { ProjectCard } from "../components/ProjectCard";
+import { ProjectFolder } from "../components/ProjectFolder";
 import { SiteNav } from "../components/SiteNav";
 import { WorksSection } from "../components/WorksSection";
 import { links, featuredRepos } from "../data/links";
@@ -45,8 +46,14 @@ describe("navigation and HUD components", () => {
   });
 
   it("renders active profile HUD state", () => {
-    render(<HudBadge state={sectionStates[2]} />);
+    const { container } = render(<HudBadge state={sectionStates[2]} />);
+    expect(container.querySelector(".profile-card")).toBeInTheDocument();
+    expect(container.querySelector(".profile-card__portrait")).toBeInTheDocument();
+    expect(container.querySelector(".profile-card__glyph")).toBeInTheDocument();
+    expect(container.querySelector(".profile-card__chip")).toBeInTheDocument();
+    expect(container.querySelectorAll(".profile-card__pixel-mark").length).toBe(3);
     expect(screen.getByText("酸辣鱼")).toBeInTheDocument();
+    expect(screen.getByText("SuanLayu")).toBeInTheDocument();
     expect(screen.getByText("@suanlayu666")).toBeInTheDocument();
     expect(screen.getByText("Build What You Want.")).toBeInTheDocument();
     expect(screen.getByText("WORKS")).toBeInTheDocument();
@@ -60,6 +67,49 @@ describe("ProjectCard", () => {
     expect(screen.queryByText(projects[0].highlights[0])).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /展开项目亮点/ }));
     expect(screen.getByText(projects[0].highlights[0])).toBeInTheDocument();
+  });
+});
+
+describe("ProjectFolder", () => {
+  it("renders a template-style folder with four project papers", () => {
+    const { container } = render(<ProjectFolder projects={projects} />);
+
+    expect(container.querySelector(".project-folder")).toBeInTheDocument();
+    expect(container.querySelector(".folder")).toBeInTheDocument();
+    expect(container.querySelector(".folder__back")).toBeInTheDocument();
+    expect(container.querySelectorAll(".folder__front").length).toBe(2);
+    expect(container.querySelectorAll(".paper").length).toBe(4);
+    expect(screen.getByRole("button", { name: /打开项目文件夹/ })).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByText("项目文件夹")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /查看项目纸片：STM32 平衡车/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /查看项目纸片：UniFlow Lab/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /查看项目纸片：蓝牙遥控避障小车/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /查看项目纸片：Never Forget/ })).toBeInTheDocument();
+  });
+
+  it("opens the folder and reveals the selected project highlights", () => {
+    const { container } = render(<ProjectFolder projects={projects} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /打开项目文件夹/ }));
+    fireEvent.click(screen.getByRole("button", { name: /查看项目纸片：UniFlow Lab/ }));
+
+    expect(container.querySelector(".folder")).toHaveClass("open");
+    expect(screen.getByRole("button", { name: /打开项目文件夹/ })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText(projects[1].highlights[0])).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /查看项目纸片：UniFlow Lab/ })).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("toggles the project cards back into the folder when the folder is clicked again", () => {
+    const { container } = render(<ProjectFolder projects={projects} />);
+    const folderButton = screen.getByRole("button", { name: /打开项目文件夹/ });
+
+    fireEvent.click(folderButton);
+    expect(container.querySelector(".folder")).toHaveClass("open");
+    expect(folderButton).toHaveAttribute("aria-expanded", "true");
+
+    fireEvent.click(folderButton);
+    expect(container.querySelector(".folder")).not.toHaveClass("open");
+    expect(folderButton).toHaveAttribute("aria-expanded", "false");
   });
 });
 
@@ -81,10 +131,11 @@ describe("content sections", () => {
   });
 
   it("renders all selected works", () => {
-    render(<WorksSection projects={projects} />);
-    expect(screen.getByRole("heading", { name: "STM32 平衡车" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "UniFlow Lab" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Never Forget" })).toBeInTheDocument();
+    const { container } = render(<WorksSection projects={projects} />);
+    expect(container.querySelector(".project-folder")).toBeInTheDocument();
+    expect(screen.getAllByRole("heading", { name: "STM32 平衡车" }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("heading", { name: "UniFlow Lab" }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole("heading", { name: "Never Forget" }).length).toBeGreaterThan(0);
   });
 
   it("renders the prototype pipeline", () => {

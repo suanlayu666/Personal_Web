@@ -6,21 +6,42 @@ type HudBadgeProps = {
 
 export function HudBadge({ state }: HudBadgeProps) {
   return (
-    <aside className="hud-badge profile-hud" aria-label="Profile and current section">
-      <div className="profile-hud__glow" aria-hidden="true" />
-      <div className="profile-hud__scan" aria-hidden="true" />
-      <div className="profile-hud__avatar" aria-hidden="true">
-        <span>SLY</span>
+    <aside className="hud-badge profile-card" aria-label="Profile and current section">
+      <div className="profile-card__behind" aria-hidden="true" />
+      <div className="profile-card__shine" aria-hidden="true" />
+      <div className="profile-card__top">
+        <span className="profile-card__status">ONLINE</span>
+        <span className="profile-card__section">{state.hudCode}</span>
       </div>
-      <div className="profile-hud__body">
-        <div className="profile-hud__topline">
-          <span className="profile-hud__status">ONLINE</span>
-          <span className="profile-hud__section">{state.hudCode}</span>
+      <div className="profile-card__title">
+        <strong className="profile-card__name">酸辣鱼</strong>
+        <span className="profile-card__subtitle">SuanLayu</span>
+      </div>
+      <div className="profile-card__portrait" aria-hidden="true">
+        <span className="profile-card__pixel-mark profile-card__pixel-mark--one" />
+        <span className="profile-card__pixel-mark profile-card__pixel-mark--two" />
+        <span className="profile-card__pixel-mark profile-card__pixel-mark--three" />
+        <div className="profile-card__chip">
+          <span className="profile-card__chip-pin profile-card__chip-pin--top" />
+          <span className="profile-card__chip-pin profile-card__chip-pin--right" />
+          <span className="profile-card__chip-pin profile-card__chip-pin--bottom" />
+          <span className="profile-card__chip-pin profile-card__chip-pin--left" />
+          <div className="profile-card__glyph">
+            <span>SLY</span>
+          </div>
+          <span className="profile-card__chip-line profile-card__chip-line--one" />
+          <span className="profile-card__chip-line profile-card__chip-line--two" />
+          <span className="profile-card__chip-label">DATA CORE</span>
         </div>
-        <strong className="profile-hud__name">酸辣鱼</strong>
-        <span className="profile-hud__handle">@suanlayu666</span>
-        <p className="profile-hud__motto">Build What You Want.</p>
-        <p className="profile-hud__meta">{state.hudMeta}</p>
+        <span className="profile-card__sigil profile-card__sigil--left" />
+        <span className="profile-card__sigil profile-card__sigil--right" />
+        <span className="profile-card__signal profile-card__signal--one" />
+        <span className="profile-card__signal profile-card__signal--two" />
+      </div>
+      <div className="profile-card__footer">
+        <span className="profile-card__handle">@suanlayu666</span>
+        <p className="profile-card__motto">Build What You Want.</p>
+        <p className="profile-card__meta">{state.hudMeta}</p>
       </div>
     </aside>
   );
